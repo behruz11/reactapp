@@ -22,7 +22,7 @@ jobs:
       - name: Add builds content to tar archive
         run: |
           tar -czf build.tar.gz ./build/
-          
+
       - name: Upload tar archive as Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -39,7 +39,6 @@ jobs:
         with:
           name: build-dir
 
-      - name: Extract build files to 
+      - name: Extract build files to
         run: |
           tar -xf build.tar.gz -C /home/charlie/site-content/
-          ls -alhi
