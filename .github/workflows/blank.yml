@@ -1,0 +1,45 @@
+name: Simple React App
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git clone latest changes
+        uses: actions/checkout@v3
+
+      - name: Installing Dependecies
+        run: |
+          npm install
+
+      - name: Run build of project
+        run: |
+          npm run build
+
+      - name: Add builds content to tar archive
+        run: |
+          tar -czf build.tar.gz ./build/
+          
+      - name: Upload tar archive as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-dir
+          path: build.tar.gz
+
+  deploy:
+    runs-on: self-hosted
+    needs: [build]
+
+    steps:
+      - name: Downlaod and extract file
+        uses: actions/download-artifact@v3
+        with:
+          name: build-dir
+
+      - name: Extract build files to 
+        run: |
+          tar -xf build.tar.gz -C /home/charlie/site-content/
+          ls -alhi
